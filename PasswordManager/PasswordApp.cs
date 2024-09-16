@@ -5,71 +5,58 @@ namespace PasswordManager
 {
     public class PasswordApp
     {
-        // Константа для хранения мастер-пароля
         private const string MasterPassword = "мультипасс";
-
-        // Словарь для хранения паролей (ключ - название сервиса, значение - пароль)
+        
         private Dictionary<string, string> passwordStorage = new Dictionary<string, string>();
-
-        // Метод для проверки мастер-пароль
-        public bool VerifyMP(string inputPassword)
+        
+        public bool VerifyMasterPassword(string inputPassword)
         {
-            // Возвращает true, если введенный пароль совпадает с мастер-паролем
             return inputPassword == MasterPassword;
         }
-
-        // Метод для добавления нового пароля
-        public void AddPassword(string service, string password)
+        
+        public void AddPassword(string login, string password)
         {
-            // Проверяем, есть ли уже пароль для данного сервиса
-            if (passwordStorage.ContainsKey(service))
+            if (passwordStorage.ContainsKey(login))
             {
-                Console.WriteLine($"Пароль для сервиса {service} уже существует.");
+                Console.WriteLine($"Пароль для сервиса {login} уже существует.");
             }
             else
             {
-                // Добавляем новый пароль, если его еще нет
-                passwordStorage.Add(service, password);
-                Console.WriteLine($"Пароль для сервиса {service} успешно добавлен.");
+                passwordStorage.Add(login, password);
+                Console.WriteLine($"Пароль для сервиса {login} успешно добавлен.");
             }
         }
-
-        // Метод для поиска пароля по названию сервиса
-        public bool SearchPassword(string service)
+        
+        public bool SearchPassword(string login)
         {
-            // Если пароль для данного сервиса существует, выводим его и возвращаем true
-            if (passwordStorage.ContainsKey(service))
+            if (passwordStorage.ContainsKey(login))
             {
-                Console.WriteLine($"Пароль для {service}: {passwordStorage[service]}");
+                Console.WriteLine($"Пароль для {login}: {passwordStorage[login]}");
                 return true;
             }
             else
             {
-                // Если пароль не найден, выводим соответствующее сообщение и возвращаем false
-                Console.WriteLine($"Пароль для сервиса {service} не найден.");
+                Console.WriteLine($"Пароль для сервиса {login} не найден.");
                 return false;
             }
         }
 
-        // Метод для изменения пароля
-        public void ChangePassword(string service)
+        public void ChangePassword(string login)
         {
-            bool validService = false;
+            bool validLogin = false;
 
-            while (!validService)
+            while (!validLogin)
             {
-                // Проверяем, существует ли пароль для данного сервиса
-                if (passwordStorage.ContainsKey(service))
+
+                if (passwordStorage.ContainsKey(login))
                 {
                     bool passwordChanged = false;
                     while (!passwordChanged)
                     {
-                        // Запрашиваем новый пароль у пользователя
                         Console.Write("Введите новый пароль: ");
                         string newPassword = Console.ReadLine()!;
 
-                        // Проверяем, совпадает ли новый пароль с текущим
-                        if (passwordStorage[service] == newPassword)
+                        if (passwordStorage[login] == newPassword)
                         {
                             Console.WriteLine("Новый пароль совпадает с текущим.");
                             Console.WriteLine("Введите другой пароль или введите 'выход' для возврата в главное меню: ");
@@ -81,36 +68,33 @@ namespace PasswordManager
                             }
                             else
                             {
-                                // Устанавливаем новый пароль для повторного ввода
                                 newPassword = userInput;
                             }
                         }
                         else
                         {
-                            // Обновляем пароль и выходим из внутреннего цикла
-                            passwordStorage[service] = newPassword;
-                            Console.WriteLine($"Пароль для сервиса {service} успешно изменен.");
+                            passwordStorage[login] = newPassword;
+                            Console.WriteLine($"Пароль для сервиса {login} успешно изменен.");
                             passwordChanged = true;
                         }
                     }
 
-                    validService = true; // Выходим из внешнего цикла, так как пароль успешно изменен
+                    validLogin = true;
                 }
                 else
                 {
-                    // Сообщение, если пароль для сервиса не найден
-                    Console.WriteLine($"Пароль для сервиса {service} не найден.");
+                    Console.WriteLine($"Пароль для сервиса {login} не найден.");
 
                     Console.Write("Попробуйте снова или введите 'выход' для возврата в главное меню: ");
                     string userInput = Console.ReadLine()!;
 
                     if (userInput! == "выход")
                     {
-                        validService = true; // Выходим из внешнего цикла и возвращаемся в главное меню
+                        validLogin = true;
                     }
                     else
                     {
-                        service = userInput; // Повторно запрашиваем название сервиса
+                        login = userInput;
                     }
                 }
             }
